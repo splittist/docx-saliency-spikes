@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import { fixtures } from './fixtures'
@@ -12,7 +13,7 @@ const DEFAULT_FIXTURE_ID = fixtures[0]?.id ?? ''
 const rendererEntries: Array<{
   id: string
   label: string
-  Renderer: (props: SpikeRendererProps) => React.JSX.Element
+  Renderer: (props: SpikeRendererProps) => JSX.Element
 }> = [
   { id: 'docx-preview', label: 'docx-preview', Renderer: DocxPreviewRenderer },
   { id: 'superdoc', label: '@superdoc-dev/react', Renderer: SuperDocRenderer },

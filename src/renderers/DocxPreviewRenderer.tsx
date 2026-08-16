@@ -16,19 +16,35 @@ export function DocxPreviewRenderer({ file, annotations }: SpikeRendererProps) {
       return
     }
 
+    let cancelled = false
     container.replaceChildren()
     setRenderError(null)
 
     if (!buffer) {
-      return
+      return () => {
+        cancelled = true
+      }
     }
 
-    renderAsync(buffer, container, container, {
+    const renderContainer = document.createElement('div')
+    container.replaceChildren(renderContainer)
+
+    renderAsync(buffer, renderContainer, renderContainer, {
       className: 'docx-preview-surface',
       inWrapper: true,
     }).catch((reason: unknown) => {
-      setRenderError(reason instanceof Error ? reason.message : 'Unable to render DOCX.')
+      if (!cancelled) {
+        setRenderError(reason instanceof Error ? reason.message : 'Unable to render DOCX.')
+      }
     })
+
+    return () => {
+      cancelled = true
+      renderContainer.replaceChildren()
+      if (renderContainer.isConnected) {
+        renderContainer.remove()
+      }
+    }
   }, [buffer])
 
   return (
