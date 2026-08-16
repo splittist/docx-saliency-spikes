@@ -3,9 +3,9 @@ import '@superdoc-dev/react/style.css'
 import type { SpikeRendererProps } from '../types'
 import { RendererSurface } from './shared'
 
-export function SuperDocRenderer({ file, annotations }: SpikeRendererProps) {
+export function SuperDocRenderer({ file, annotations, saliency }: SpikeRendererProps) {
   return (
-    <RendererSurface title="@superdoc-dev/react" annotations={annotations}>
+    <RendererSurface title="@superdoc-dev/react" annotations={annotations} saliency={saliency}>
       {file ? (
         <div className="superdoc-host">
           <SuperDocEditor document={file} documentMode="viewing" hideToolbar />

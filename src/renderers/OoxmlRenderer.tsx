@@ -4,7 +4,7 @@ import { useFileArrayBuffer } from '../hooks/useFileArrayBuffer'
 import type { SpikeRendererProps } from '../types'
 import { RendererSurface } from './shared'
 
-export function OoxmlRenderer({ file, annotations }: SpikeRendererProps) {
+export function OoxmlRenderer({ file, annotations, saliency }: SpikeRendererProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const { buffer, error, isLoading } = useFileArrayBuffer(file)
   const [renderError, setRenderError] = useState<string | null>(null)
@@ -44,6 +44,7 @@ export function OoxmlRenderer({ file, annotations }: SpikeRendererProps) {
       annotations={annotations}
       error={error ?? renderError}
       isLoading={isLoading}
+      saliency={saliency}
     >
       <div className="ooxml-host" ref={containerRef} />
     </RendererSurface>

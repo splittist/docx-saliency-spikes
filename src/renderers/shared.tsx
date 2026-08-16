@@ -6,18 +6,22 @@ export function RendererSurface({
   children,
   error,
   isLoading,
+  saliency,
   title,
 }: PropsWithChildren<{
   annotations: AnnotationSet | null
   error?: string | null
   isLoading?: boolean
+  saliency: number
   title: string
 }>) {
   const chips = annotations?.annotations ?? []
 
   return (
     <section className="renderer-surface" aria-label={title}>
-      <div className="renderer-canvas">{renderState({ children, error, isLoading })}</div>
+      <div className="renderer-canvas" style={{ ['--saliency' as string]: saliency }}>
+        {renderState({ children, error, isLoading })}
+      </div>
       <div className="renderer-annotations">
         <strong>Annotation targets</strong>
         {annotations ? (

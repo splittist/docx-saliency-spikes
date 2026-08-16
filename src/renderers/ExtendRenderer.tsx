@@ -3,7 +3,7 @@ import { useFileArrayBuffer } from '../hooks/useFileArrayBuffer'
 import type { SpikeRendererProps } from '../types'
 import { RendererSurface } from './shared'
 
-export function ExtendRenderer({ file, annotations }: SpikeRendererProps) {
+export function ExtendRenderer({ file, annotations, saliency }: SpikeRendererProps) {
   const { buffer, error, isLoading } = useFileArrayBuffer(file)
 
   return (
@@ -12,6 +12,7 @@ export function ExtendRenderer({ file, annotations }: SpikeRendererProps) {
       annotations={annotations}
       error={error}
       isLoading={isLoading}
+      saliency={saliency}
     >
       <div className="html-renderer">
         <ReactDocxViewer file={buffer ?? undefined} emptyState="Select a DOCX file or fixture." />

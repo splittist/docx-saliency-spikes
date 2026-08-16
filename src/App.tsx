@@ -29,6 +29,7 @@ function App() {
   const [fixtureError, setFixtureError] = useState<string | null>(null)
   const [isFixtureLoading, setIsFixtureLoading] = useState(false)
   const [activeRendererId, setActiveRendererId] = useState(rendererEntries[0]?.id ?? '')
+  const [saliency, setSaliency] = useState(1)
 
   const selectedFixture = useMemo(
     () => fixtures.find((fixture) => fixture.id === fixtureId) ?? null,
@@ -115,6 +116,18 @@ function App() {
           />
         </label>
 
+        <label>
+          <span>Saliency: {saliency.toFixed(2)}</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={saliency}
+            onChange={(event) => setSaliency(event.target.valueAsNumber)}
+          />
+        </label>
+
         <button type="button" onClick={() => setUploadedFile(null)} disabled={!uploadedFile}>
           Revert to fixture
         </button>
@@ -159,7 +172,7 @@ function App() {
             <div className="renderer-card-header">
               <h2>{label}</h2>
             </div>
-            <Renderer file={activeFile} annotations={annotations} />
+            <Renderer file={activeFile} annotations={annotations} saliency={saliency} />
           </article>
         ))}
       </section>

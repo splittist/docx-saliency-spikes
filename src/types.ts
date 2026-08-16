@@ -1,6 +1,7 @@
 export interface SpikeRendererProps {
   file: File | null
   annotations: AnnotationSet | null
+  saliency: number
 }
 
 export interface AnnotationSet {
