@@ -9,6 +9,11 @@ Compare four DOCX rendering surfaces side by side for externally generated salie
 - `@extend-ai/react-docx`
 - `@silurus/ooxml`
 
+## Annotation rendering notes
+
+- `docx-preview` and `@extend-ai/react-docx` render ordinary DOM text that can be wrapped with saliency spans. Extend UI parses asynchronously and does not expose a viewer-render callback, so its adapter observes the viewer host and reapplies the transform after renderer updates.
+- SuperDoc requires run-level text segmentation to preserve its layout. See `src/renderers/annotationDom.ts` for the shared matching and presentation logic.
+
 ## Local development
 
 ```bash
