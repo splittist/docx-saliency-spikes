@@ -116,8 +116,46 @@
 
 .renderer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
   gap: 1rem;
+}
+
+.renderer-tabs {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding: 0.35rem;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.renderer-tab {
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: transparent;
+  color: #475569;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.renderer-tab:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.renderer-tab[aria-selected='true'] {
+  border-color: #cbd5e1;
+  border-bottom-color: #fff;
+  margin-bottom: -1px;
+  background: #fff;
+  color: #0f172a;
+}
+
+.renderer-tab:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
 }
 
 .renderer-card {
@@ -125,6 +163,10 @@
   gap: 0;
   min-height: 30rem;
   overflow: hidden;
+}
+
+.renderer-card[hidden] {
+  display: none;
 }
 
 .renderer-card-header {

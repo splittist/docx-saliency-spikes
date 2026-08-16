@@ -28,6 +28,7 @@ function App() {
   const [annotations, setAnnotations] = useState<AnnotationSet | null>(null)
   const [fixtureError, setFixtureError] = useState<string | null>(null)
   const [isFixtureLoading, setIsFixtureLoading] = useState(false)
+  const [activeRendererId, setActiveRendererId] = useState(rendererEntries[0]?.id ?? '')
 
   const selectedFixture = useMemo(
     () => fixtures.find((fixture) => fixture.id === fixtureId) ?? null,
@@ -78,7 +79,7 @@ function App() {
           <p className="eyebrow">Initial project setup</p>
           <h1>DOCX saliency spike harness</h1>
           <p className="lede">
-            Compare four DOCX rendering surfaces side by side against one shared annotation shape.
+            Compare four DOCX rendering surfaces against one shared annotation shape.
           </p>
         </div>
         <dl className="summary-grid">
@@ -128,9 +129,33 @@ function App() {
         {fixtureError ? <p className="error-text">{fixtureError}</p> : null}
       </section>
 
-      <section className="renderer-grid" aria-label="Renderer comparison grid">
+      <section className="renderer-grid" aria-label="Renderer comparison">
+        <div className="renderer-tabs" role="tablist" aria-label="Renderers">
+          {rendererEntries.map(({ id, label }) => (
+            <button
+              key={id}
+              id={`renderer-tab-${id}`}
+              type="button"
+              role="tab"
+              aria-controls={`renderer-panel-${id}`}
+              aria-selected={activeRendererId === id}
+              className="renderer-tab"
+              onClick={() => setActiveRendererId(id)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         {rendererEntries.map(({ id, label, Renderer }) => (
-          <article key={id} className="renderer-card">
+          <article
+            key={id}
+            id={`renderer-panel-${id}`}
+            className="renderer-card"
+            role="tabpanel"
+            aria-labelledby={`renderer-tab-${id}`}
+            hidden={activeRendererId !== id}
+          >
             <div className="renderer-card-header">
               <h2>{label}</h2>
             </div>
