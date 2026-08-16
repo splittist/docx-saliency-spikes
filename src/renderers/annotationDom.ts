@@ -75,6 +75,91 @@ export function applySuperDocSaliency(root: Element, annotations: Annotation[], 
   }
 }
 
+export function applyOoxmlSaliency(
+  root: Element,
+  pageTexts: string[],
+  annotations: Annotation[],
+  saliency: number,
+) {
+  const pageStarts: number[] = []
+  let fullText = ''
+
+  for (const pageText of pageTexts) {
+    pageStarts.push(fullText.length)
+    fullText += pageText
+  }
+
+  const annotationRanges = annotations
+    .map((annotation) => ({
+      annotation,
+      range: findAnnotationOffsets(fullText, annotation),
+    }))
+    .filter((match): match is { annotation: Annotation; range: { start: number; end: number } } => match.range !== null)
+
+  for (const canvas of root.querySelectorAll('canvas')) {
+    ;(canvas as HTMLElement).style.opacity = `${clamp(saliency)}`
+  }
+
+  for (const layer of root.querySelectorAll<HTMLElement>('[data-ooxml-selection-surface="docx"]')) {
+    const pageIndex = Number(layer.dataset.pageIndex)
+    const pageStart = pageStarts[pageIndex]
+
+    if (pageStart === undefined) {
+      continue
+    }
+
+    let runStart = pageStart
+
+    for (const run of [...layer.children].filter(
+      (child): child is HTMLElement =>
+        child instanceof HTMLElement && child.dataset.ooxmlSelectionRun === 'docx',
+    )) {
+      const text = run.textContent ?? ''
+      const runEnd = runStart + text.length
+      const boundaries = new Set([0, text.length])
+
+      for (const { range } of annotationRanges) {
+        if (range.start < runEnd && range.end > runStart) {
+          boundaries.add(Math.max(0, range.start - runStart))
+          boundaries.add(Math.min(text.length, range.end - runStart))
+        }
+      }
+
+      run.replaceChildren()
+      const sortedBoundaries = [...boundaries].sort((left, right) => left - right)
+
+      for (let boundaryIndex = 0; boundaryIndex < sortedBoundaries.length - 1; boundaryIndex += 1) {
+        const start = sortedBoundaries[boundaryIndex]
+        const end = sortedBoundaries[boundaryIndex + 1]
+        const segment = document.createElement('span')
+        const segmentStart = runStart + start
+        const segmentEnd = runStart + end
+        const matchingAnnotations = annotationRanges.filter(
+          ({ range }) => range.start < segmentEnd && range.end > segmentStart,
+        )
+
+        segment.className = 'ooxml-saliency-segment'
+        segment.textContent = text.slice(start, end)
+        if (matchingAnnotations.length) {
+          const annotationSalience = Math.max(
+            ...matchingAnnotations.map(({ annotation }) => clamp(annotation.presentation.salience)),
+          )
+
+          segment.style.color = '#0f172a'
+          segment.style.background = saliencyBackground(annotationSalience)
+        } else {
+          segment.style.color = 'transparent'
+          segment.style.background = 'transparent'
+        }
+
+        run.append(segment)
+      }
+
+      runStart = runEnd
+    }
+  }
+}
+
 function findAnnotationRange(root: Element, annotation: Annotation) {
   const textNodes = getTextNodes(root)
   const fullText = textNodes.map((node) => node.data).join('')
@@ -198,4 +283,13 @@ function wrapOrdinaryText(root: Element, opacity: number) {
 
 function clamp(value: number) {
   return Math.min(1, Math.max(0, value))
+}
+
+function saliencyBackground(salience: number) {
+  const red = 239
+  const green = 68
+  const blue = 68
+  const inverseSalience = 1 - salience
+
+  return `rgb(${Math.round(red * salience + 255 * inverseSalience)} ${Math.round(green * salience + 255 * inverseSalience)} ${Math.round(blue * salience + 255 * inverseSalience)})`
 }
