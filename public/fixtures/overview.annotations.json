@@ -1,0 +1,48 @@
+{
+  "id": "overview-annotations",
+  "label": "Overview annotation set",
+  "annotations": [
+    {
+      "id": "overview-1",
+      "target": {
+        "text": "externally generated attention annotations",
+        "prefix": "compare rendering surfaces for ",
+        "suffix": "."
+      },
+      "presentation": {
+        "salience": 0.95
+      },
+      "metadata": {
+        "category": "goal"
+      }
+    },
+    {
+      "id": "overview-2",
+      "target": {
+        "text": "performs no document analysis",
+        "prefix": "The harness ",
+        "suffix": "."
+      },
+      "presentation": {
+        "salience": 0.8
+      },
+      "metadata": {
+        "category": "non-goal"
+      }
+    },
+    {
+      "id": "overview-3",
+      "target": {
+        "text": "salience overlays practical",
+        "prefix": "to make ",
+        "suffix": "."
+      },
+      "presentation": {
+        "salience": 0.6
+      }
+    }
+  ],
+  "metadata": {
+    "documentId": "overview"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "pagination-annotations",
+  "label": "Pagination annotation set",
+  "annotations": [
+    {
+      "id": "pagination-1",
+      "target": {
+        "text": "annotation anchoring",
+        "prefix": "text selection, and ",
+        "suffix": ".",
+        "occurrence": 3
+      },
+      "presentation": {
+        "salience": 0.92
+      }
+    },
+    {
+      "id": "pagination-2",
+      "target": {
+        "text": "stable layout",
+        "prefix": "compared against ",
+        "suffix": ", visible text",
+        "occurrence": 8
+      },
+      "presentation": {
+        "salience": 0.72
+      }
+    },
+    {
+      "id": "pagination-3",
+      "target": {
+        "text": "one file, one annotation format, and one comparison view",
+        "prefix": "deliberately share ",
+        "suffix": ".",
+        "occurrence": 12
+      },
+      "presentation": {
+        "salience": 0.55
+      }
+    }
+  ],
+  "metadata": {
+    "documentId": "pagination"
+  }
+}
